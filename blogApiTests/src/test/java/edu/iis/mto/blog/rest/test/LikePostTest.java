@@ -31,5 +31,13 @@ package edu.iis.mto.blog.rest.test;
                  .body(jsonObj.toString()).expect().log().all().statusCode(HttpStatus.SC_BAD_REQUEST).when()
                  .post(NEW_USER_NOT_OWNER_OF_POST);
      }
+  
+     @Test
+     public void likingPostByPostOwnerReturnsBadRequest() {
+         JSONObject jsonObj = new JSONObject();
+         RestAssured.given().accept(ContentType.JSON).header("Content-Type", "application/json;charset=UTF-8")
+                 .body(jsonObj.toString()).expect().log().all().statusCode(HttpStatus.SC_BAD_REQUEST).when()
+                 .post(CONFIRMED_USER_OWNER_OF_POST);
+     
      
  }
