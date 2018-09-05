@@ -35,7 +35,7 @@ public class BlogDataFinder extends DomainService implements DataFinder {
         List<User> users = userRepository.findByFirstNameContainingOrLastNameContainingOrEmailContainingAllIgnoreCase(
                 searchString, searchString, searchString);
 
-        return users.stream().map(user -> mapper.mapToDto(user)).collect(Collectors.toList());
+        return users.stream().filter(x -> !(AccountStatus.REMOVED.equals(x.getAccountStatus()))).map(user -> mapper.mapToDto(user)).collect(Collectors.toList());
     }
 
     @Override
@@ -54,7 +54,6 @@ public class BlogDataFinder extends DomainService implements DataFinder {
     	if(user.getAccountStatus().equals(AccountStatus.REMOVED)){
             throw new DomainError("could not get removed user posts");
         }
-        User user = userRepository.findOne(userId);
         List<BlogPost> posts = blogPostRepository.findByUser(user);
         return posts.stream().map(post -> mapper.mapToDto(post)).collect(Collectors.toList());
     }
